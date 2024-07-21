@@ -3,13 +3,16 @@ package com.example.carrentals.view
 import android.os.Bundle
 import android.view.Menu
 import android.view.MenuItem
+import androidx.activity.viewModels
 import androidx.appcompat.app.AppCompatActivity
 import com.example.carrentals.R
 import com.example.carrentals.databinding.ActivityMainBinding
+import com.example.carrentals.viewmodel.SpeedMonitorViewModel
 
 class MainActivity : AppCompatActivity() {
 
     private lateinit var binding: ActivityMainBinding
+    private val speedMonitorViewModel: SpeedMonitorViewModel by viewModels()
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -39,16 +42,25 @@ class MainActivity : AppCompatActivity() {
         // UI is supposed to have 2 edit texts to enter customer id and max speed.
         // 2 buttons -
         // One to start rental session, [Invokes startRentalSession() when clicked]
-        // another to stop the session. [Invoked stopRentalSession() wen clicked]
+        // another to stop the session. [Invoked stopRentalSession() wen clicked], hidden by default.
     }
 
     private fun startRentalSession() {
         // Validate the inputs from the edit texts
-
+        val customerId = "ABC1244" // Get from the edit text
+        val maxSpeed = 80F // Get from edit text
+        speedMonitorViewModel.apply {
+            startMonitoring(
+                createSession(customerId, maxSpeed)
+            )
+        }
+        // Hide the edit texts and start button.
+        // Show stop button
     }
 
     private fun stopRentalSession() {
-        // Clear the edit texts and make them visible.
+        // Validate with an OTP to ensure it's stopped by authorised person
+        // then Clear the edit texts and make them visible.
         // Hide the stop session button
         // Clear Session data.
     }
