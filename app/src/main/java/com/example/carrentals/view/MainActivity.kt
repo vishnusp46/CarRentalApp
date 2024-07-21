@@ -50,9 +50,8 @@ class MainActivity : AppCompatActivity() {
         val customerId = "ABC1244" // Get from the edit text
         val maxSpeed = 80F // Get from edit text
         speedMonitorViewModel.apply {
-            startMonitoring(
-                createSession(customerId, maxSpeed)
-            )
+            createSession(customerId, maxSpeed)
+            startMonitoring()
         }
         // Hide the edit texts and start button.
         // Show stop button
@@ -62,6 +61,6 @@ class MainActivity : AppCompatActivity() {
         // Validate with an OTP to ensure it's stopped by authorised person
         // then Clear the edit texts and make them visible.
         // Hide the stop session button
-        // Clear Session data.
+        speedMonitorViewModel.stopMonitoring()
     }
 }

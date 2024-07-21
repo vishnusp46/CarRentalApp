@@ -1,9 +1,12 @@
 package com.example.carrentals.viewmodel
 
 import android.app.Application
+import android.content.Intent
+import androidx.core.content.ContextCompat
 import androidx.lifecycle.AndroidViewModel
 import com.example.carrentals.model.RentalSession
 import com.example.carrentals.repository.SpeedMonitorRepository
+import com.example.carrentals.view.SpeedMonitorService
 
 class SpeedMonitorViewModel(application: Application) : AndroidViewModel(application) {
 
@@ -15,8 +18,22 @@ class SpeedMonitorViewModel(application: Application) : AndroidViewModel(applica
         }
     }
 
-    fun startMonitoring(session: RentalSession) {}
+    fun startMonitoring() {
+        getApplication<Application>().apply {
+            ContextCompat.startForegroundService(
+                this,
+                Intent(this, SpeedMonitorService::class.java)
+            )
+        }
+    }
 
-    fun stopMonitoring() {}
+    fun stopMonitoring() {
+        getApplication<Application>().apply {
+            stopService(
+                Intent(this, SpeedMonitorService::class.java)
+            )
+        }
+        repository.clearRentalSession(getApplication())
+    }
 
 }

@@ -24,6 +24,13 @@ class SpeedMonitorRepository {
             RentalSession(customerId, it.getFloat(PREF_KEY_MAX_SPEED, 0F))
         }
 
+    fun clearRentalSession(context: Context) {
+        getSharedPreferences(context)
+            .edit()
+            .clear()
+            .apply()
+    }
+
     companion object {
         private const val PREFERENCE_NAME = "com.example.carrentals.CAR_RENTAL_APP_PREF"
         private const val PREF_KEY_CUSTOMER_ID = "customer_id"
