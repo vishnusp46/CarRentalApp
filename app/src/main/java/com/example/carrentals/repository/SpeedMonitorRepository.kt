@@ -5,6 +5,8 @@ import com.example.carrentals.model.RentalSession
 
 class SpeedMonitorRepository {
 
+    private val firebaseManager = FirebaseManager()
+
     private fun getSharedPreferences(context: Context) =
         context.getSharedPreferences(PREFERENCE_NAME, Context.MODE_PRIVATE)
 
@@ -29,6 +31,10 @@ class SpeedMonitorRepository {
             .edit()
             .clear()
             .apply()
+    }
+
+    fun sendOverSpeedAlertToServer(rentalSession: RentalSession, currentSpeed: Float) {
+        firebaseManager.sendOverSpeedAlert(rentalSession, currentSpeed)
     }
 
     companion object {

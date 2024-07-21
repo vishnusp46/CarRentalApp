@@ -1,6 +1,5 @@
 package com.example.carrentals.view
 
-import android.app.Notification
 import android.app.Service
 import android.content.Context
 import android.content.Intent
@@ -9,6 +8,8 @@ import android.util.Log
 import com.example.carrentals.model.RentalSession
 import com.example.carrentals.repository.SpeedMonitorRepository
 import com.example.carrentals.util.createForegroundServiceNotification
+import com.example.carrentals.util.createSpeedAlertNotification
+import com.example.carrentals.util.showNotification
 
 class SpeedMonitorService : Service() {
 
@@ -17,8 +18,12 @@ class SpeedMonitorService : Service() {
     private var vehicleSpeedManager: VehicleSpeedManager? = null
 
     private val onSpeedChangeListener = { speed ->
-        if (speed > rentalSession?.maxSpeed) {
-            // TODO Notify the rental company
+        rentalSession?.maxSpeed?.let { maxSpeed ->
+            if (speed > maxSpeed) {
+                speedMonitorRepository.sendOverSpeedAlertToServer(rentalSession!!, speed)
+                val notification = createSpeedAlertNotification(this, speed, maxSpeed)
+                showNotification(this, OVER_SPEED_NOTIFICATION_ID, notification)
+            }
         }
     }
 
@@ -61,5 +66,6 @@ class SpeedMonitorService : Service() {
     companion object {
         private const val TAG = "SpeedMonitorService"
         private const val FOREGROUND_SERVICE_NOTIFICATION_ID = 100
+        private const val OVER_SPEED_NOTIFICATION_ID = 500
     }
 }
